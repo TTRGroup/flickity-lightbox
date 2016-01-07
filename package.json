@@ -1,0 +1,22 @@
+{
+  "name": "flickity-lightbox",
+  "version": "1.0.0",
+  "description": "",
+  "main": "flickity-lightbox.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/familiar-studio/flickity-lightbox.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/familiar-studio/flickity-lightbox/issues"
+  },
+  "homepage": "https://github.com/familiar-studio/flickity-lightbox#readme",
+  "dependencies": {
+    "flickity": "^1.1.2"
+  }
+}

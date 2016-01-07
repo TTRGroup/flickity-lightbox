@@ -1,0 +1,40 @@
+{
+  "name": "flickity-lightbox",
+  "main": "flickity-lightbox.js",
+  "version": "1.0.0",
+  "dependencies": {
+    "flickity": ">=1.0.0 <1.2.0"
+  },
+  "devDependencies": {
+    "qunit": "~1.17.1",
+    "imagesloaded": "3.2.0",
+    "flickity-as-nav-for": "~1.0.2",
+    "flickity-imagesloaded": "~1.0.2"    
+  },
+  "homepage": "https://github.com/familiar-studio/flickity-lightbox",
+  "authors": [
+    "Familiar Studio"
+  ],
+  "description": "Enable lightbox option for Flickity",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "flickity",
+    "lightbox"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "package.json"
+  ],
+  "resolutions": {
+    "imagesloaded": ">=3.1.8 <3.3.0"
+  }
+}

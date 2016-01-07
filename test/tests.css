@@ -1,0 +1,60 @@
+body {
+  font-family: sans-serif;
+  color: #333;
+}
+
+.gallery {
+  border: 1px solid;
+  width: 400px;
+  margin-bottom: 40px;
+}
+
+.gallery img {
+  display: block;
+  height: 140px;
+}
+
+.gallery-background-images div {
+  height: 200px;
+  width: 400px;
+}
+
+.flickity-lightbox-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: calc(100% - 100px);
+  padding: 50px;
+  background-color: rgba(255,255,255,0.95);
+}
+
+.flickity-lightbox-metadata {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px;
+}
+
+.flickity-lightbox-metadata .flickity-lightbox-counter {
+  align-self: center;
+  padding-right: 10px;
+}
+
+.flickity-lightbox-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.flickity-lightbox-main .lightbox-cell-main {
+  width: 100%;
+  height: 60vh;
+  background-size: cover;
+}
+
+.flickity-lightbox-nav .lightbox-cell-nav {
+  width: 25%;
+  height: 15vh;
+}
