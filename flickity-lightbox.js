@@ -124,7 +124,8 @@ Flickity.prototype.openLightbox = function(e, pointer, cellEl, cellIndex) {
 }
 
 Flickity.prototype.closeLightbox = function() {
-  this.lightbox.parentNode.removeChild(this.lightbox)
+  this.lightbox.parentNode.removeChild( this.lightbox );
+  this.dispatchEvent( 'lightboxClose', event );
 };
 
 return Flickity;
