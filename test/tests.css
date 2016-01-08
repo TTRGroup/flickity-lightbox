@@ -47,6 +47,7 @@ body {
   position: absolute;
   top: 15px;
   right: 15px;
+  cursor: pointer;
 }
 
 .flickity-lightbox-main .lightbox-cell-main {

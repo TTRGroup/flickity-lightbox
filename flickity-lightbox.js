@@ -40,8 +40,23 @@ Flickity.prototype._createLightbox = function() {
     if ( !this.options.lightbox ) {
       return;
     }
-    this.on('staticClick', this.openLightbox)
-    if (this.options.lightbox === 'open') {
+
+    this.options.lightbox = {
+      open: this.options.lightbox.open || false,
+      mainOpts: this.options.lightbox.mainOpts || {
+        percentPosition: false,
+        contain: true,
+        pageDots: false
+      },
+      navOpts: this.options.lightbox.navOpts || {
+        percentPosition: false,
+        contain: true,
+        pageDots: false
+      }
+    }
+
+    this.on( 'staticClick', this.openLightbox )
+    if ( this.options.lightbox.open ) {
       this.openLightbox(null, null, null, 0)
     }
   })
@@ -71,21 +86,13 @@ Flickity.prototype.openLightbox = function(e, pointer, cellEl, cellIndex) {
   this.lightbox = document.body.appendChild(lightbox);
 
   //init cloned flickity inside lightbox
-  var flkty = new Flickity( flktyClone, {
-    percentPosition: false,
-    contain: true,
-    initialIndex: cellIndex,
-    pageDots: false
-  });
+  this.options.lightbox.mainOpts.initialIndex = cellIndex;
+  var flkty = new Flickity( flktyClone, this.options.lightbox.mainOpts );
 
   //init flickity as nav for flickity inside lightbox
-  var flktyNav = new Flickity( flktyCloneNav, {
-    percentPosition: false,
-    contain: true,
-    asNavFor: flktyClone,
-    initialIndex: cellIndex,
-    pageDots: false
-  });
+  this.options.lightbox.navOpts.asNavFor = flktyClone;
+  this.options.lightbox.navOpts.initialIndex = cellIndex;
+  var flktyNav = new Flickity( flktyCloneNav, this.options.lightbox.navOpts );
 
   //create dom for lightbox metaData
   var metaData = lightbox.insertBefore(document.createElement('div'), flktyClone)
@@ -106,7 +113,7 @@ Flickity.prototype.openLightbox = function(e, pointer, cellEl, cellIndex) {
 
   var closeBtn = lightbox.appendChild(document.createElement('div'));
   closeBtn.className = 'flickity-lightbox-close';
-  closeBtn.innerHTML = '<button>close</button>';
+  closeBtn.innerHTML = '<div>X</div>';
   closeBtn.addEventListener('click', this.closeLightbox.bind(this));
 
   flkty.on('cellSelect', function () {

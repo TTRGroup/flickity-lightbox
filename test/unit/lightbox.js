@@ -17,7 +17,12 @@ function test() {
   //gallery with background images
   var backgroundImagesGallery = document.querySelector('#background-images');
   flkty = new Flickity( backgroundImagesGallery, {
-    lightbox: 'open',
+    lightbox: {
+      open: true,
+      mainOpts: {
+        pageDots: true
+      }
+    },
     contain: true
   });
 }
