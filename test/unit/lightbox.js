@@ -17,7 +17,7 @@ function test() {
   //gallery with background images
   var backgroundImagesGallery = document.querySelector('#background-images');
   flkty = new Flickity( backgroundImagesGallery, {
-    lightbox: true,
+    lightbox: 'open',
     contain: true
   });
 }

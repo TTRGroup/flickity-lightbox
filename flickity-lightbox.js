@@ -41,6 +41,9 @@ Flickity.prototype._createLightbox = function() {
       return;
     }
     this.on('staticClick', this.openLightbox)
+    if (this.options.lightbox === 'open') {
+      this.openLightbox(null, null, null, 0)
+    }
   })
 };
 
@@ -55,12 +58,12 @@ Flickity.prototype.openLightbox = function(e, pointer, cellEl, cellIndex) {
   flktyCloneNav.classList.add('flickity-lightbox-nav')
 
   this.cells.forEach(function(cell) {
-    var mainEl = cell.element.cloneNode();
+    var mainEl = cell.element.cloneNode(true);
     mainEl.style.position = null;
     mainEl.className = 'lightbox-cell-main';
     flktyClone.appendChild(mainEl);
 
-    var navEl = mainEl.cloneNode();
+    var navEl = mainEl.cloneNode(true);
     navEl.className = 'lightbox-cell-nav';
     flktyCloneNav.appendChild(navEl);
   });
