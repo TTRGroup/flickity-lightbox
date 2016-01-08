@@ -1,7 +1,7 @@
 {
   "name": "flickity-lightbox",
   "main": "flickity-lightbox.js",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "dependencies": {
     "flickity": ">=1.0.0 <1.2.0"
   },
@@ -9,7 +9,7 @@
     "qunit": "~1.17.1",
     "imagesloaded": "3.2.0",
     "flickity-as-nav-for": "~1.0.2",
-    "flickity-imagesloaded": "~1.0.2"    
+    "flickity-imagesloaded": "~1.0.2"
   },
   "homepage": "https://github.com/familiar-studio/flickity-lightbox",
   "authors": [

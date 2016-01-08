@@ -1,5 +1,5 @@
 /*!
- * Flickity lightbox v1.0.0
+ * Flickity lightbox v1.0.3
  * enables lightbox option for Flickity
  */
 
@@ -86,12 +86,10 @@ Flickity.prototype.openLightbox = function(e, pointer, cellEl, cellIndex) {
   this.lightbox = document.body.appendChild(lightbox);
 
   //init cloned flickity inside lightbox
-  this.options.lightbox.mainOpts.initialIndex = cellIndex;
   var flkty = new Flickity( flktyClone, this.options.lightbox.mainOpts );
 
   //init flickity as nav for flickity inside lightbox
   this.options.lightbox.navOpts.asNavFor = flktyClone;
-  this.options.lightbox.navOpts.initialIndex = cellIndex;
   var flktyNav = new Flickity( flktyCloneNav, this.options.lightbox.navOpts );
 
   //create dom for lightbox metaData
@@ -104,7 +102,7 @@ Flickity.prototype.openLightbox = function(e, pointer, cellEl, cellIndex) {
 
   var counter = metaData.appendChild(document.createElement('h4'));
   counter.className = 'flickity-lightbox-counter';
-  counter.innerHTML = '<span class="selected-index">' + (cellIndex + 1) + '</span> of <span class="flickity-length">' + flkty.cells.length + '</span>'
+  counter.innerHTML = '<span class="selected-index">' + ((cellIndex || this.options.lightbox.mainOpts.initialIndex) + 1) + '</span> of <span class="flickity-length">' + flkty.cells.length + '</span>'
   var selectedIndex = counter.querySelector('.selected-index');
 
   var captionContainer = lightbox.appendChild(document.createElement('div'));
