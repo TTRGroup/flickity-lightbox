@@ -10,15 +10,15 @@ function test() {
   flkty = new Flickity( imagesGallery, {
     lightbox: true,
     percentPosition: false,
-    contain: true,
-    imagesLoaded: true
+    contain: true
   });
+
 
   //gallery with background images
   var backgroundImagesGallery = document.querySelector('#background-images');
   flkty = new Flickity( backgroundImagesGallery, {
     lightbox: {
-      open: true,
+      // open: true,
       mainOpts: {
         pageDots: true
       }
