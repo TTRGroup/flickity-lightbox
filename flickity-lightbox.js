@@ -44,30 +44,34 @@ Flickity.prototype._createLightbox = function() {
     //set default options or user-defined options
     this.options.lightbox = {
       open: this.options.lightbox.open || false,
-      headerOpts: {
-        disableCounter: this.options.lightbox.headerOpts && this.options.lightbox.headerOpts.disableCounter   || false,
-        html:     this.options.lightbox.headerOpts && this.options.lightbox.headerOpts.html                   || '<h2 class="flickity-lightbox-title">data-title goes here</h2><h4 class="flickity-lightbox-counter"><span class="selected-index">flickity selectedIndex</span> of <span class="flickity-length">flickity length</span></h4>',
-        dataTarget: this.options.lightbox.headerOpts && this.options.lightbox.headerOpts.dataTarget           || 'span',
-        disable:  this.options.lightbox.headerOpts && this.options.lightbox.headerOpts.disable                || false
+      counter: {
+        position: this.options.lightbox.counter && this.options.lightbox.counter.position      || 'header',
+        dataTarget: this.options.lightbox.counter && this.options.lightbox.counter.dataTarget  || 'h4',
+        disable: this.options.lightbox.counter && this.options.lightbox.counter.disable        || false
       },
-      mainOpts: this.options.lightbox.mainOpts || {
+      header: {
+        html:     this.options.lightbox.header && this.options.lightbox.header.html                   || '<h2 class="flickity-lightbox-title">data-title goes here</h2><h4 class="flickity-lightbox-counter"><span class="selected-index">flickity selectedIndex</span> of <span class="flickity-length">flickity length</span></h4>',
+        dataTarget: this.options.lightbox.header && this.options.lightbox.header.dataTarget           || 'span',
+        disable:  this.options.lightbox.header && this.options.lightbox.header.disable                || false
+      },
+      main: this.options.lightbox.main || {
         percentPosition: false,
         contain: true,
         pageDots: false
       },
-      navOpts: this.options.lightbox.navOpts || {
+      nav: this.options.lightbox.nav || {
         percentPosition: false,
         contain: true,
         pageDots: false
       },
-      footerOpts: {
-        html: this.options.lightbox.footerOpts && this.options.lightbox.footerOpts.html             || '<p>data-caption goes here</p>',
-        dataTarget: this.options.lightbox.footerOpts && this.options.lightbox.footerOpts.dataTarget || 'span',
-        disable: this.options.lightbox.footerOpts && this.options.lightbox.footerOpts.disable       || false
+      footer: {
+        html: this.options.lightbox.footer && this.options.lightbox.footer.html             || '<p>data-caption goes here</p>',
+        dataTarget: this.options.lightbox.footer && this.options.lightbox.footer.dataTarget || 'span',
+        disable: this.options.lightbox.footer && this.options.lightbox.footer.disable       || false
       },
-      closeOpts: {
-        html: this.options.lightbox.closeOpts && this.options.lightbox.closeOpts.html         || '<div>X</div>',
-        disable: this.options.lightbox.closeOpts && this.options.lightbox.closeOpts.disable   || false
+      close: {
+        html: this.options.lightbox.close && this.options.lightbox.close.html         || '<div>X</div>',
+        disable: this.options.lightbox.close && this.options.lightbox.close.disable   || false
       }
     };
 
@@ -80,30 +84,38 @@ Flickity.prototype._createLightbox = function() {
     flktyCloneNav.className = 'flickity-lightbox-nav';
 
     //create dom for lightbox header
-    if (!this.options.lightbox.headerOpts.disable) {
+    if (!this.options.lightbox.header.disable) {
       var header = lightbox.insertBefore(document.createElement('div'), flktyClone);
       header.className = 'flickity-lightbox-header';
-      var title = makeDataTarget(header, this.options.lightbox.headerOpts.dataTarget, this.options.lightbox.headerOpts.html)
-
-      if (!this.options.lightbox.headerOpts.disableCounter) {
-        var counter = header.appendChild(document.createElement('h4'));
-        counter.className = 'flickity-lightbox-counter';
-        counter.innerHTML = '<span class="selected-index">' + ((this.options.lightbox.mainOpts.initialIndex || 0) + 1) + '</span> of <span class="flickity-length">' + this.cells.length + '</span>'
-        var selectedIndex = counter.querySelector('.selected-index');
-      }
+      var titleDataTarget = makeDataTarget(header, this.options.lightbox.header.dataTarget, this.options.lightbox.header.html);
+      var title = titleDataTarget.dataTarget;
     }
 
     //create dom for lightbox footer container
-    if (!this.options.lightbox.footerOpts.disable) {
+    if (!this.options.lightbox.footer.disable) {
       var footer = lightbox.appendChild(document.createElement('div'));
       footer.className = 'flickity-lightbox-footer';
-      var caption = makeDataTarget(footer, this.options.lightbox.footerOpts.dataTarget, this.options.lightbox.footerOpts.html)
+      var captionDataTarget = makeDataTarget(footer, this.options.lightbox.footer.dataTarget, this.options.lightbox.footer.html);
+      captionDataTarget.parent.className = 'flickity-lightbox-caption';
+      var caption = captionDataTarget.dataTarget;
     }
 
-    if (!this.options.lightbox.closeOpts.disable) {
+    //create dom for counter (default position is in header)
+    var counter = document.createElement(this.options.lightbox.counter.dataTarget);
+    counter.className = 'flickity-lightbox-counter';
+    counter.innerHTML = '<span class="flickity-lightbox-selected-index">' + ((this.options.lightbox.main.initialIndex || 0) + 1) + '</span> <span class="flickity-lightbox-counter-words">of</span> <span class="flickity-length">' + this.cells.length + '</span>'
+    var selectedIndex = counter.querySelector('.flickity-lightbox-selected-index');
+
+    if (this.options.lightbox.counter.position === 'header') { //default position
+      header.appendChild(counter);
+    } else if (this.options.lightbox.counter.position === 'footer') {
+      footer.appendChild(counter);
+    }
+
+    if (!this.options.lightbox.close.disable) {
       var closeBtn = lightbox.appendChild(document.createElement('div'));
       closeBtn.className = 'flickity-lightbox-close';
-      closeBtn.innerHTML = '<div>X</div>';
+      closeBtn.innerHTML = this.options.lightbox.close.html;
       closeBtn.addEventListener('click', this.dispatchEvent.bind(this, 'lightboxClose'));
     }
 
@@ -126,8 +138,11 @@ Flickity.prototype._createLightbox = function() {
   function makeDataTarget(parent, dataTarget, html) {
     var dataTarget = document.createElement(dataTarget);
     dataTarget.className = 'data-target';
-    parent.innerHTML = customHTML(dataTarget.outerHTML, html)
-    return parent.querySelector('.data-target');
+    parent.innerHTML = customHTML(dataTarget.outerHTML, html);
+    return {
+      parent: parent,
+      dataTarget: parent.querySelector('.data-target')
+    };
   }
 
   function customHTML(dataTarget, htmlString) {
@@ -160,24 +175,24 @@ Flickity.prototype.openLightbox = function(e, pointer, cellEl, cellIndex) {
   this.lightbox.container.style.display = 'block';
 
   //init cloned flickity inside lightbox
-  this.options.lightbox.mainOpts.initialIndex = cellIndex;
-  var flkty = new Flickity( this.lightbox.flktyClone, this.options.lightbox.mainOpts );
+  this.options.lightbox.main.initialIndex = cellIndex;
+  var flkty = new Flickity( this.lightbox.flktyClone, this.options.lightbox.main );
 
   //init flickity as nav for flickity inside lightbox
-  this.options.lightbox.navOpts.asNavFor = this.lightbox.flktyClone;
-  this.options.lightbox.navOpts.initialIndex = cellIndex;
-  var flktyNav = new Flickity( this.lightbox.flktyCloneNav, this.options.lightbox.navOpts );
+  this.options.lightbox.nav.asNavFor = this.lightbox.flktyClone;
+  this.options.lightbox.nav.initialIndex = cellIndex;
+  var flktyNav = new Flickity( this.lightbox.flktyCloneNav, this.options.lightbox.nav );
 
   //update bindings
   flkty.on( 'lightboxUpdate', function() {
-    if (!this.options.lightbox.headerOpts.disable) {
+    if (!this.options.lightbox.header.disable) {
       this.lightbox.title.textContent = flkty.cells[flkty.selectedIndex].element.getAttribute('data-title');
-      if (!this.options.lightbox.headerOpts.disableCounter) {
+      if (!this.options.lightbox.counter.disable) {
         this.lightbox.counter.textContent = flkty.selectedIndex + 1;
       }
     }
 
-    if (!this.options.lightbox.footerOpts.disable) {
+    if (!this.options.lightbox.footer.disable) {
       this.lightbox.caption.textContent = flkty.cells[flkty.selectedIndex].element.getAttribute('data-caption');
     }
 
