@@ -50,7 +50,7 @@ Flickity.prototype._createLightbox = function() {
         disable: this.options.lightbox.counter && this.options.lightbox.counter.disable        || false
       },
       header: {
-        html:     this.options.lightbox.header && this.options.lightbox.header.html                   || '<h2 class="flickity-lightbox-title">data-title goes here</h2><h4 class="flickity-lightbox-counter"><span class="selected-index">flickity selectedIndex</span> of <span class="flickity-length">flickity length</span></h4>',
+        html:     this.options.lightbox.header && this.options.lightbox.header.html,
         dataTarget: this.options.lightbox.header && this.options.lightbox.header.dataTarget           || 'span',
         disable:  this.options.lightbox.header && this.options.lightbox.header.disable                || false
       },
@@ -65,7 +65,7 @@ Flickity.prototype._createLightbox = function() {
         pageDots: false
       },
       footer: {
-        html: this.options.lightbox.footer && this.options.lightbox.footer.html             || '<p>data-caption goes here</p>',
+        html: this.options.lightbox.footer && this.options.lightbox.footer.html,
         dataTarget: this.options.lightbox.footer && this.options.lightbox.footer.dataTarget || 'span',
         disable: this.options.lightbox.footer && this.options.lightbox.footer.disable       || false
       },
@@ -87,17 +87,16 @@ Flickity.prototype._createLightbox = function() {
     if (!this.options.lightbox.header.disable) {
       var header = lightbox.insertBefore(document.createElement('div'), flktyClone);
       header.className = 'flickity-lightbox-header';
-      var titleDataTarget = makeDataTarget(header, this.options.lightbox.header.dataTarget, this.options.lightbox.header.html);
-      var title = titleDataTarget.dataTarget;
+      header.innerHTML = fillContainer(this.options.lightbox.header);
+      var headerTarget = header.querySelector('.data-target');
     }
 
     //create dom for lightbox footer container
     if (!this.options.lightbox.footer.disable) {
       var footer = lightbox.appendChild(document.createElement('div'));
       footer.className = 'flickity-lightbox-footer';
-      var captionDataTarget = makeDataTarget(footer, this.options.lightbox.footer.dataTarget, this.options.lightbox.footer.html);
-      captionDataTarget.parent.className = 'flickity-lightbox-caption';
-      var caption = captionDataTarget.dataTarget;
+      footer.innerHTML = fillContainer(this.options.lightbox.footer);
+      var footerTarget = footer.querySelector('.data-target');
     }
 
     //create dom for counter (default position is in header)
@@ -124,8 +123,8 @@ Flickity.prototype._createLightbox = function() {
       container: document.body.appendChild(lightbox),
       flktyClone: flktyClone,
       flktyCloneNav: flktyCloneNav,
-      title: title,
-      caption: caption,
+      header: headerTarget,
+      footer: footerTarget,
       counter: selectedIndex
     };
 
@@ -135,23 +134,18 @@ Flickity.prototype._createLightbox = function() {
     }
   })
 
-  function makeDataTarget(parent, dataTarget, html) {
-    var dataTarget = document.createElement(dataTarget);
-    dataTarget.className = 'data-target';
-    parent.innerHTML = customHTML(dataTarget.outerHTML, html);
-    return {
-      parent: parent,
-      dataTarget: parent.querySelector('.data-target')
-    };
-  }
+  function fillContainer(opts) {
+    var dataTargetStr = '<' + opts.dataTarget + ' class="data-target">' + '</' + opts.dataTarget + '>';
 
-  function customHTML(dataTarget, htmlString) {
-    if (htmlString.indexOf('{') > 0) {
-      var preText = htmlString.slice(0, htmlString.indexOf('{'));
-      var postText = htmlString.slice(htmlString.indexOf('}') + 1)
-      return preText + dataTarget + postText;
-    } else {
-      return dataTarget;
+    if (!opts.html) {
+      return dataTargetStr;
+    } else if (opts.html && opts.html.indexOf('{') > 0) {
+      var preText = opts.html.slice(0, opts.html.indexOf('{'));
+      var postText = opts.html.slice(opts.html.indexOf('}') + 1);
+      return preText + dataTargetStr + postText;
+    } else if (opts.html) {
+      console.error('Please provide a "{}" inside any custom html strings passed to flickity-lightbox options')
+      return false;
     }
   }
 };
@@ -186,14 +180,14 @@ Flickity.prototype.openLightbox = function(e, pointer, cellEl, cellIndex) {
   //update bindings
   flkty.on( 'lightboxUpdate', function() {
     if (!this.options.lightbox.header.disable) {
-      this.lightbox.title.textContent = flkty.cells[flkty.selectedIndex].element.getAttribute('data-title');
+      this.lightbox.header.innerHTML = flkty.cells[flkty.selectedIndex].element.getAttribute('data-header');
       if (!this.options.lightbox.counter.disable) {
-        this.lightbox.counter.textContent = flkty.selectedIndex + 1;
+        this.lightbox.counter.innerHTML = flkty.selectedIndex + 1;
       }
     }
 
     if (!this.options.lightbox.footer.disable) {
-      this.lightbox.caption.textContent = flkty.cells[flkty.selectedIndex].element.getAttribute('data-caption');
+      this.lightbox.footer.innerHTML = flkty.cells[flkty.selectedIndex].element.getAttribute('data-footer');
     }
 
   }.bind(this));
