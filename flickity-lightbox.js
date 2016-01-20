@@ -169,12 +169,12 @@ Flickity.prototype.openLightbox = function(e, pointer, cellEl, cellIndex) {
   this.lightbox.container.style.display = 'block';
 
   //init cloned flickity inside lightbox
-  this.options.lightbox.main.initialIndex = cellIndex;
+  this.options.lightbox.main.initialIndex = this.options.lightbox.main.initialIndex || cellIndex;
   var flkty = new Flickity( this.lightbox.flktyClone, this.options.lightbox.main );
 
   //init flickity as nav for flickity inside lightbox
   this.options.lightbox.nav.asNavFor = this.lightbox.flktyClone;
-  this.options.lightbox.nav.initialIndex = cellIndex;
+  this.options.lightbox.nav.initialIndex = this.options.lightbox.main.initialIndex || cellIndex;
   var flktyNav = new Flickity( this.lightbox.flktyCloneNav, this.options.lightbox.nav );
 
   //update bindings

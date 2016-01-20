@@ -8,6 +8,10 @@ function test() {
   flkty = new Flickity( imagesGallery, {
     cellAlign: 'left',
     lightbox: {
+      open: true,
+      main: {
+        initialIndex: 3
+      },
       header: {
         // dataTarget: 'h1',
         html: '<div class="custom">heyO: {} </div>'
