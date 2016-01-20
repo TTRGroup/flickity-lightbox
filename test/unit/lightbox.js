@@ -9,12 +9,12 @@ function test() {
     cellAlign: 'left',
     lightbox: {
       open: true,
-      main: {
-        initialIndex: 3
-      },
       header: {
         // dataTarget: 'h1',
         html: '<div class="custom">heyO: {} </div>'
+      },
+      main: {
+        initialIndex: 2
       },
       close: {
         // html: '<h1>CLOSE IT</h1>'

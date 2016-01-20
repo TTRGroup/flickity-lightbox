@@ -128,9 +128,12 @@ Flickity.prototype._createLightbox = function() {
       counter: selectedIndex
     };
 
-    this.on( 'staticClick', this.openLightbox )
+    this.on( 'staticClick', function( e, pointer, cellEl, cellIndex ) {
+      this.openLightbox( cellIndex, this.cells )
+    }.bind(this));
+
     if ( this.options.lightbox.open ) {
-      this.openLightbox(null, null, null, 0)
+      this.openLightbox( 0, this.cells )
     }
   })
 
@@ -150,8 +153,8 @@ Flickity.prototype._createLightbox = function() {
   }
 };
 
-Flickity.prototype.fillLightbox = function() {
-  this.cells.forEach(function(cell) {
+Flickity.prototype.fillLightbox = function(galleryCells) {
+  galleryCells.forEach(function(cell) {
     var mainEl = cell.element.cloneNode(true);
     mainEl.style.position = null;
     mainEl.className = 'lightbox-cell-main';
@@ -163,9 +166,9 @@ Flickity.prototype.fillLightbox = function() {
   }.bind(this));
 }
 
-Flickity.prototype.openLightbox = function(e, pointer, cellEl, cellIndex) {
+Flickity.prototype.openLightbox = function(cellIndex, galleryCells) {
   //generate content inside .flickity-lightbox-main and .flickity-lightbox-nav
-  this.fillLightbox();
+  this.fillLightbox(galleryCells);
   this.lightbox.container.style.display = 'block';
 
   //init cloned flickity inside lightbox
@@ -189,14 +192,14 @@ Flickity.prototype.openLightbox = function(e, pointer, cellEl, cellIndex) {
     if (!this.options.lightbox.footer.disable) {
       this.lightbox.footer.innerHTML = flkty.cells[flkty.selectedIndex].element.getAttribute('data-footer');
     }
-
   }.bind(this));
 
-  flkty.dispatchEvent('lightboxUpdate');
+  flkty.dispatchEvent( 'lightboxUpdate' );
   flkty.on( 'cellSelect', this.dispatchEvent.bind( flkty, 'lightboxUpdate' ));
 
   this.on( 'lightboxClose', function() {
     this.lightbox.container.style.display = 'none';
+    this.options.lightbox.main.initialIndex = null;
     flkty.destroy();
     flktyNav.destroy();
   });
