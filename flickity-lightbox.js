@@ -41,103 +41,115 @@ Flickity.prototype._createLightbox = function() {
       return;
     }
 
-    //set default options or user-defined options
-    this.options.lightbox = {
-      open: this.options.lightbox.open || false,
-      counter: {
-        position: this.options.lightbox.counter && this.options.lightbox.counter.position      || 'header',
-        dataTarget: this.options.lightbox.counter && this.options.lightbox.counter.dataTarget  || 'h4',
-        disable: this.options.lightbox.counter && this.options.lightbox.counter.disable        || false
-      },
-      header: {
-        html:     this.options.lightbox.header && this.options.lightbox.header.html,
-        dataTarget: this.options.lightbox.header && this.options.lightbox.header.dataTarget           || 'span',
-        disable:  this.options.lightbox.header && this.options.lightbox.header.disable                || false
-      },
-      main: this.options.lightbox.main || {
-        percentPosition: false,
-        contain: true,
-        pageDots: false
-      },
-      nav: this.options.lightbox.nav || {
-        percentPosition: false,
-        contain: true,
-        pageDots: false
-      },
-      footer: {
-        html: this.options.lightbox.footer && this.options.lightbox.footer.html,
-        dataTarget: this.options.lightbox.footer && this.options.lightbox.footer.dataTarget || 'span',
-        disable: this.options.lightbox.footer && this.options.lightbox.footer.disable       || false
-      },
-      close: {
-        html: this.options.lightbox.close && this.options.lightbox.close.html         || '<div>X</div>',
-        disable: this.options.lightbox.close && this.options.lightbox.close.disable   || false
-      }
-    };
-
-    //create new dom for lightbox
-    var lightbox = document.createElement('div');
-    lightbox.className = 'flickity-lightbox-container';
-    var flktyClone = lightbox.appendChild(document.createElement('div'));
-    var flktyCloneNav = lightbox.appendChild(document.createElement('div'));
-    flktyClone.className = 'flickity-lightbox-main';
-    flktyCloneNav.className = 'flickity-lightbox-nav';
-
-    //create dom for lightbox header
-    if (!this.options.lightbox.header.disable) {
-      var header = lightbox.insertBefore(document.createElement('div'), flktyClone);
-      header.className = 'flickity-lightbox-header';
-      header.innerHTML = fillContainer(this.options.lightbox.header);
-      var headerTarget = header.querySelector('.data-target');
-    }
-
-    //create dom for lightbox footer container
-    if (!this.options.lightbox.footer.disable) {
-      var footer = lightbox.appendChild(document.createElement('div'));
-      footer.className = 'flickity-lightbox-footer';
-      footer.innerHTML = fillContainer(this.options.lightbox.footer);
-      var footerTarget = footer.querySelector('.data-target');
-    }
-
-    //create dom for counter (default position is in header)
-    var counter = document.createElement(this.options.lightbox.counter.dataTarget);
-    counter.className = 'flickity-lightbox-counter';
-    counter.innerHTML = '<span class="flickity-lightbox-selected-index">' + ((this.options.lightbox.main.initialIndex || 0) + 1) + '</span> <span class="flickity-lightbox-counter-words">of</span> <span class="flickity-length">' + this.cells.length + '</span>'
-    var selectedIndex = counter.querySelector('.flickity-lightbox-selected-index');
-
-    if (this.options.lightbox.counter.position === 'header') { //default position
-      header.appendChild(counter);
-    } else if (this.options.lightbox.counter.position === 'footer') {
-      footer.appendChild(counter);
-    }
-
-    if (!this.options.lightbox.close.disable) {
-      var closeBtn = lightbox.appendChild(document.createElement('div'));
-      closeBtn.className = 'flickity-lightbox-close';
-      closeBtn.innerHTML = this.options.lightbox.close.html;
-      closeBtn.addEventListener('click', this.dispatchEvent.bind(this, 'lightboxClose'));
-    }
-
-    lightbox.style.display = 'none';
-    this.lightbox = {
-      container: document.body.appendChild(lightbox),
-      flktyClone: flktyClone,
-      flktyCloneNav: flktyCloneNav,
-      header: headerTarget,
-      footer: footerTarget,
-      counter: selectedIndex
-    };
+    this.initLightbox(this.options.lightbox);
 
     this.on( 'staticClick', function( e, pointer, cellEl, cellIndex ) {
-      this.openLightbox( cellIndex, this.cells )
+      this.openLightbox( this.getCellElements(), cellIndex )
     }.bind(this));
 
     if ( this.options.lightbox.open ) {
-      this.openLightbox( 0, this.cells )
+      this.openLightbox( this.getCellElements(), cellIndex )
     }
   })
+};
 
-  function fillContainer(opts) {
+Flickity.prototype._resolveLightboxOptions = function(opts) {
+  if (!opts) {
+    return;
+  }
+  return {
+    _resolved:         true,
+    open:              opts.open                                  || false,
+    counter: {
+      position:        opts.counter && opts.counter.position      || 'header',
+      dataTarget:      opts.counter && opts.counter.dataTarget    || 'h4',
+      disable:         opts.counter && opts.counter.disable       || false
+    },
+    header: {
+      html:            opts.header && opts.header.html,
+      dataTarget:      opts.header && opts.header.dataTarget      || 'span',
+      disable:         opts.header && opts.header.disable         || false
+    },
+    main: opts.main || {
+      percentPosition: false,
+      contain:         true,
+      pageDots:        false
+    },
+    nav: opts.nav || {
+      percentPosition: false,
+      contain:         true,
+      pageDots:        false
+    },
+    footer: {
+    html:              opts.footer && opts.footer.html,
+      dataTarget:      opts.footer && opts.footer.dataTarget      || 'span',
+      disable:         opts.footer && opts.footer.disable         || false
+    },
+    close: {
+    html:              opts.close && opts.close.html              || '<div>X</div>',
+      disable:         opts.close && opts.close.disable           || false
+    }
+  };
+}
+
+Flickity.prototype.initLightbox = function(userOpts) {
+  var opts = this._resolveLightboxOptions(userOpts);
+
+  //create new dom for lightbox
+  var lightbox = document.createElement('div');
+  lightbox.className = 'flickity-lightbox-container';
+  var flktyCloneContainer = lightbox.appendChild(document.createElement('div'));
+  var flktyCloneNavContainer = lightbox.appendChild(document.createElement('div'));
+  flktyCloneContainer.className = 'flickity-lightbox-main';
+  flktyCloneNavContainer.className = 'flickity-lightbox-nav';
+
+  //create dom for lightbox header
+  if (!opts.header.disable) {
+    var header = lightbox.insertBefore(document.createElement('div'), flktyCloneContainer);
+    header.className = 'flickity-lightbox-header';
+    header.innerHTML = buildStaticMarkup(opts.header);
+    var headerTarget = header.querySelector('.data-target');
+  }
+
+  //create dom for lightbox footer container
+  if (!opts.footer.disable) {
+    var footer = lightbox.appendChild(document.createElement('div'));
+    footer.className = 'flickity-lightbox-footer';
+    footer.innerHTML = buildStaticMarkup(opts.footer);
+    var footerTarget = footer.querySelector('.data-target');
+  }
+
+  //create dom for counter (default position is in header)
+  var counter = document.createElement(opts.counter.dataTarget);
+  counter.className = 'flickity-lightbox-counter';
+  counter.innerHTML = '<span class="flickity-lightbox-selected-index">' + ((opts.main.initialIndex || 0) + 1) + '</span> <span class="flickity-lightbox-counter-words">of</span> <span class="flickity-length"></span>'
+  var selectedIndex = counter.querySelector('.flickity-lightbox-selected-index');
+
+  if (opts.counter.position === 'header') { //default position
+    header.appendChild(counter);
+  } else if (opts.counter.position === 'footer') {
+    footer.appendChild(counter);
+  }
+
+  if (!opts.close.disable) {
+    var closeBtn = lightbox.appendChild(document.createElement('div'));
+    closeBtn.className = 'flickity-lightbox-close';
+    closeBtn.innerHTML = opts.close.html;
+  }
+
+  lightbox.style.display = 'none';
+
+  var lightboxRefs = {
+    container: document.body.appendChild(lightbox),
+    flktyClone: flktyCloneContainer,
+    flktyCloneNav: flktyCloneNavContainer,
+    header: headerTarget,
+    footer: footerTarget,
+    counter: selectedIndex,
+    close: closeBtn
+  };
+
+  function buildStaticMarkup(opts) {
     var dataTargetStr = '<' + opts.dataTarget + ' class="data-target">' + '</' + opts.dataTarget + '>';
 
     if (!opts.html) {
@@ -151,46 +163,43 @@ Flickity.prototype._createLightbox = function() {
       return false;
     }
   }
-};
 
-Flickity.prototype.fillLightbox = function(galleryCells) {
-  galleryCells.forEach(function(cell) {
-    var mainEl = cell.element.cloneNode(true);
-    mainEl.style.position = null;
-    mainEl.className = 'lightbox-cell-main';
-    this.lightbox.flktyClone.appendChild(mainEl);
-
-    var navEl = mainEl.cloneNode(true);
-    navEl.className = 'lightbox-cell-nav';
-    this.lightbox.flktyCloneNav.appendChild(navEl);
-  }.bind(this));
+  var instance = this.options ? this : new Flickity(document.createElement('div'), {lightbox: opts});
+  if (this.options) {
+    instance.options.lightbox = opts;
+  }
+  instance.lightboxRefs = lightboxRefs;
+  closeBtn.addEventListener('click', instance.dispatchEvent.bind(instance, 'lightboxClose'));
+  return instance;
 }
 
-Flickity.prototype.openLightbox = function(cellIndex, galleryCells) {
+Flickity.prototype.openLightbox = function(galleryCells, cellIndex) {
   //generate content inside .flickity-lightbox-main and .flickity-lightbox-nav
-  this.fillLightbox(galleryCells);
-  this.lightbox.container.style.display = 'block';
+  this._fillLightbox(galleryCells);
+  var counterLength = document.querySelector('.flickity-length');
+  counterLength.textContent = galleryCells.length;
+  this.lightboxRefs.container.style.display = 'block';
 
   //init cloned flickity inside lightbox
   this.options.lightbox.main.initialIndex = this.options.lightbox.main.initialIndex || cellIndex;
-  var flkty = new Flickity( this.lightbox.flktyClone, this.options.lightbox.main );
+  var flkty = new Flickity( this.lightboxRefs.flktyClone, this.options.lightbox.main );
 
   //init flickity as nav for flickity inside lightbox
-  this.options.lightbox.nav.asNavFor = this.lightbox.flktyClone;
+  this.options.lightbox.nav.asNavFor = '.flickity-lightbox-main';
   this.options.lightbox.nav.initialIndex = this.options.lightbox.main.initialIndex || cellIndex;
-  var flktyNav = new Flickity( this.lightbox.flktyCloneNav, this.options.lightbox.nav );
+  var flktyNav = new Flickity( this.lightboxRefs.flktyCloneNav, this.options.lightbox.nav );
 
   //update bindings
   flkty.on( 'lightboxUpdate', function() {
     if (!this.options.lightbox.header.disable) {
-      this.lightbox.header.innerHTML = flkty.cells[flkty.selectedIndex].element.getAttribute('data-header');
+      this.lightboxRefs.header.innerHTML = flkty.cells[flkty.selectedIndex].element.getAttribute('data-header');
       if (!this.options.lightbox.counter.disable) {
-        this.lightbox.counter.innerHTML = flkty.selectedIndex + 1;
+        this.lightboxRefs.counter.innerHTML = flkty.selectedIndex + 1;
       }
     }
 
     if (!this.options.lightbox.footer.disable) {
-      this.lightbox.footer.innerHTML = flkty.cells[flkty.selectedIndex].element.getAttribute('data-footer');
+      this.lightboxRefs.footer.innerHTML = flkty.cells[flkty.selectedIndex].element.getAttribute('data-footer');
     }
   }.bind(this));
 
@@ -198,11 +207,33 @@ Flickity.prototype.openLightbox = function(cellIndex, galleryCells) {
   flkty.on( 'cellSelect', this.dispatchEvent.bind( flkty, 'lightboxUpdate' ));
 
   this.on( 'lightboxClose', function() {
-    this.lightbox.container.style.display = 'none';
+    this.lightboxRefs.container.style.display = 'none';
     this.options.lightbox.main.initialIndex = null;
+    this.options.lightbox.nav.initialIndex = null;
+    this.options.lightbox.nav.asNavFor = null;
+    this.lightboxRefs.close.removeEventListener('click', this.dispatchEvent)
+    this.removeNavSelectedElement();
     flkty.destroy();
     flktyNav.destroy();
+
+    var lightboxContentMain = document.querySelector('.flickity-lightbox-main')
+    var lightboxContentNav = document.querySelector('.flickity-lightbox-nav')
+    lightboxContentMain.innerHTML = '';
+    lightboxContentNav.innerHTML = '';
   });
+}
+
+Flickity.prototype._fillLightbox = function(galleryCells) {
+  Array.prototype.forEach.call(galleryCells, function(cell) {
+    var mainEl = cell.cloneNode(true);
+    mainEl.style.position = null;
+    mainEl.className = 'lightbox-cell-main';
+    this.lightboxRefs.flktyClone.appendChild(mainEl);
+
+    var navEl = mainEl.cloneNode(true);
+    navEl.className = 'lightbox-cell-nav';
+    this.lightboxRefs.flktyCloneNav.appendChild(navEl);
+  }.bind(this));
 }
 
 return Flickity;
