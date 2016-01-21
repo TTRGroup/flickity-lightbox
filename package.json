@@ -1,6 +1,6 @@
 {
   "name": "flickity-lightbox",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "",
   "main": "flickity-lightbox.js",
   "scripts": {
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/familiar-studio/flickity-lightbox#readme",
   "dependencies": {
-    "flickity": "^1.1.2"
+    "flickity": "^1.1.2",
+    "flickity-as-nav-for": "^1.0.2"
   }
 }

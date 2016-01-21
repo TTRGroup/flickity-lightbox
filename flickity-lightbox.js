@@ -58,7 +58,6 @@ Flickity.prototype._resolveLightboxOptions = function(opts) {
     return;
   }
   return {
-    _resolved:         true,
     open:              opts.open                                  || false,
     counter: {
       position:        opts.counter && opts.counter.position      || 'header',
@@ -224,7 +223,24 @@ Flickity.prototype.openLightbox = function(galleryCells, cellIndex) {
 }
 
 Flickity.prototype._fillLightbox = function(galleryCells) {
-  Array.prototype.forEach.call(galleryCells, function(cell) {
+  var source = galleryCells.response ? galleryCells.response : galleryCells;
+
+  if (typeof source === 'string') {
+    try {
+      var data = JSON.parse(galleryCells)
+      source = [];
+      data.forEach(function(asset) {
+        var img = document.createElement('img')
+        img.src = asset.url;
+        source.push(img);
+      });
+
+    } catch(e) {
+      console.error(e)
+    }
+  }
+
+  Array.prototype.forEach.call(source, function(cell) {
     var mainEl = cell.cloneNode(true);
     mainEl.style.position = null;
     mainEl.className = 'lightbox-cell-main';
