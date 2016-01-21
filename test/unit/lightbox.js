@@ -7,33 +7,36 @@ function test() {
   var imagesGallery = document.querySelector('#images'); //img elments
 
 
-  // flkty = new Flickity( imagesGallery, {
-  //   cellAlign: 'left',
-  //   lightbox: {
-  //     // open: true,
-  //     header: {
-  //       // dataTarget: 'h1',
-  //       html: '<div class="custom">heyO: {} </div>'
-  //     },
-  //     // main: {
-  //     //   initialIndex: 2
-  //     // },
-  //     close: {
-  //       // html: '<h1>CLOSE IT</h1>'
-  //     }
-  //   }
-  // });
+  flkty = new Flickity( imagesGallery, {
+    cellAlign: 'left',
+    lightbox: {
+      // open: true,
+      header: {
+        // dataTarget: 'h1',
+        html: '<div class="custom">heyO: {} </div>'
+      },
+      // main: {
+      //   initialIndex: 2
+      // },
+      close: {
+        // html: '<h1>CLOSE IT</h1>'
+      }
+    }
+  });
 
+  console.log(flkty)
+  console.log(flkty.lightbox)
 
-  var emptyLightbox = Flickity.prototype.initLightbox({})
-
-
-  var imageCells = imagesGallery.querySelectorAll('img')
-  Array.prototype.forEach.call(imageCells, function(cell, index) {
-    cell.addEventListener('click', function() {
-      emptyLightbox.openLightbox(imageCells, index)
-    })
-  })
+  //
+  // var emptyLightbox = Flickity.prototype.initLightbox({})
+  //
+  //
+  // var imageCells = imagesGallery.querySelectorAll('img')
+  // Array.prototype.forEach.call(imageCells, function(cell, index) {
+  //   cell.addEventListener('click', function() {
+  //     emptyLightbox.openLightbox(imageCells, index)
+  //   })
+  // })
 }
 
 
