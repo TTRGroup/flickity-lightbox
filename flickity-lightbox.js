@@ -175,8 +175,6 @@ Flickity.prototype.initLightbox = function(userOpts) {
 Flickity.prototype.openLightbox = function(galleryCells, cellIndex) {
   //generate content inside .flickity-lightbox-main and .flickity-lightbox-nav
   this._fillLightbox(galleryCells);
-  var counterLength = document.querySelector('.flickity-length');
-  counterLength.textContent = galleryCells.length;
   this.lightboxRefs.container.style.display = 'block';
 
   //init cloned flickity inside lightbox
@@ -250,6 +248,9 @@ Flickity.prototype._fillLightbox = function(galleryCells) {
     navEl.className = 'lightbox-cell-nav';
     this.lightboxRefs._flktyCloneNav.appendChild(navEl);
   }.bind(this));
+
+  var counterLength = document.querySelector('.flickity-length');
+  counterLength.textContent = source.length;
 }
 
 return Flickity;

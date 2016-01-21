@@ -24,9 +24,6 @@ function test() {
     }
   });
 
-  console.log(flkty)
-  console.log(flkty.lightbox)
-
   //
   // var emptyLightbox = Flickity.prototype.initLightbox({})
   //
