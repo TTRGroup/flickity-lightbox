@@ -37,7 +37,7 @@ Flickity.createMethods.push('_createLightbox');
 
 Flickity.prototype._createLightbox = function() {
   this.on('activate', function() {
-    if ( !this.options.lightbox ) {
+    if ( !this.options.lightbox || this.options.lightbox._initialized ) {
       return;
     }
 
@@ -163,10 +163,15 @@ Flickity.prototype.initLightbox = function(userOpts) {
     }
   }
 
-  var instance = this.options ? this : new Flickity(document.createElement('div'), {lightbox: opts});
-  if (this.options) {
+  var instance;
+  if (this.options) { //instance already exists
+    instance = this;
     instance.options.lightbox = opts;
+  } else {
+    opts._initialized = true;
+    instance = new Flickity(document.createElement('div'), {lightbox: opts})
   }
+
   instance.lightboxRefs = lightboxRefs;
   closeBtn.addEventListener('click', instance.dispatchEvent.bind(instance, 'lightboxClose'));
   return instance;
