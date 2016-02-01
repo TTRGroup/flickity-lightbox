@@ -233,11 +233,16 @@ Flickity.prototype._fillLightbox = function(galleryCells) {
       var data = JSON.parse(galleryCells);
       source = [];
       data.forEach(function(asset) {
+        var galleryCell = document.createElement('div');
+        galleryCell.className = 'img-wrapper';
+
         var img = document.createElement('img');
         img.setAttribute('data-header', asset.header);
         img.setAttribute('data-footer', asset.footer);
         img.src = asset.url;
-        source.push(img);
+
+        galleryCell.appendChild(img);
+        source.push(galleryCell);
       });
 
     } catch(e) {

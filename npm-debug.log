@@ -1,0 +1,69 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@2.10.1
+3 info using node@v0.12.4
+4 verbose node symlink /usr/local/bin/node
+5 verbose publish [ '.' ]
+6 silly cache add args [ '.', null ]
+7 verbose cache add spec .
+8 silly cache add parsed spec { raw: '.',
+8 silly cache add   scope: null,
+8 silly cache add   name: null,
+8 silly cache add   rawSpec: '.',
+8 silly cache add   spec: '/Users/davefischoff/Sites/flickity-lightbox',
+8 silly cache add   type: 'directory' }
+9 verbose addLocalDirectory /Users/davefischoff/.npm/flickity-lightbox/1.1.2/package.tgz not in flight; packing
+10 verbose tar pack [ '/Users/davefischoff/.npm/flickity-lightbox/1.1.2/package.tgz',
+10 verbose tar pack   '/Users/davefischoff/Sites/flickity-lightbox' ]
+11 verbose tarball /Users/davefischoff/.npm/flickity-lightbox/1.1.2/package.tgz
+12 verbose folder /Users/davefischoff/Sites/flickity-lightbox
+13 info prepublish flickity-lightbox@1.1.2
+14 verbose addLocalTarball adding from inside cache /Users/davefischoff/.npm/flickity-lightbox/1.1.2/package.tgz
+15 silly cache afterAdd flickity-lightbox@1.1.2
+16 verbose afterAdd /Users/davefischoff/.npm/flickity-lightbox/1.1.2/package/package.json not in flight; writing
+17 verbose afterAdd /Users/davefischoff/.npm/flickity-lightbox/1.1.2/package/package.json written
+18 silly publish { name: 'flickity-lightbox',
+18 silly publish   version: '1.1.2',
+18 silly publish   description: '',
+18 silly publish   main: 'flickity-lightbox.js',
+18 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+18 silly publish   repository:
+18 silly publish    { type: 'git',
+18 silly publish      url: 'git+https://github.com/familiar-studio/flickity-lightbox.git' },
+18 silly publish   author: '',
+18 silly publish   license: 'ISC',
+18 silly publish   bugs: { url: 'https://github.com/familiar-studio/flickity-lightbox/issues' },
+18 silly publish   homepage: 'https://github.com/familiar-studio/flickity-lightbox#readme',
+18 silly publish   dependencies: { flickity: '^1.1.2', 'flickity-as-nav-for': '^1.0.2' },
+18 silly publish   gitHead: '954114a239cb5c7105975e51a323bc48310f6aca',
+18 silly publish   readme: 'ERROR: No README data found!',
+18 silly publish   _id: 'flickity-lightbox@1.1.2',
+18 silly publish   _shasum: 'c628dba5d53e69faeb5b3915197c49375f407549',
+18 silly publish   _from: '.' }
+19 verbose getPublishConfig undefined
+20 silly mapToRegistry name flickity-lightbox
+21 silly mapToRegistry using default registry
+22 silly mapToRegistry registry https://registry.npmjs.org/
+23 silly mapToRegistry uri https://registry.npmjs.org/flickity-lightbox
+24 verbose publish registryBase https://registry.npmjs.org/
+25 silly publish uploading /Users/davefischoff/.npm/flickity-lightbox/1.1.2/package.tgz
+26 verbose stack Error: auth required for publishing
+26 verbose stack     at CachingRegistryClient.publish (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/publish.js:30:14)
+26 verbose stack     at /usr/local/lib/node_modules/npm/lib/publish.js:134:14
+26 verbose stack     at mapToRegistry (/usr/local/lib/node_modules/npm/lib/utils/map-to-registry.js:55:3)
+26 verbose stack     at publish_ (/usr/local/lib/node_modules/npm/lib/publish.js:104:3)
+26 verbose stack     at Array.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/slide/lib/bind-actor.js:15:8)
+26 verbose stack     at LOOP (/usr/local/lib/node_modules/npm/node_modules/slide/lib/chain.js:15:14)
+26 verbose stack     at LOOP (/usr/local/lib/node_modules/npm/node_modules/slide/lib/chain.js:14:28)
+26 verbose stack     at chain (/usr/local/lib/node_modules/npm/node_modules/slide/lib/chain.js:20:5)
+26 verbose stack     at /usr/local/lib/node_modules/npm/lib/publish.js:73:5
+26 verbose stack     at RES (/usr/local/lib/node_modules/npm/node_modules/inflight/inflight.js:23:14)
+27 verbose cwd /Users/davefischoff/Sites/flickity-lightbox
+28 error Darwin 15.2.0
+29 error argv "node" "/usr/local/bin/npm" "publish"
+30 error node v0.12.4
+31 error npm  v2.10.1
+32 error code ENEEDAUTH
+33 error need auth auth required for publishing
+33 error need auth You need to authorize this machine using `npm adduser`
+34 verbose exit [ 1, true ]
