@@ -235,12 +235,10 @@ Flickity.prototype._fillLightbox = function(galleryCells) {
       data.forEach(function(asset) {
         var galleryCell = document.createElement('div');
         galleryCell.className = 'img-wrapper';
-
+        galleryCell.setAttribute('data-header', asset.header);
+        galleryCell.setAttribute('data-footer', asset.footer);
         var img = document.createElement('img');
-        img.setAttribute('data-header', asset.header);
-        img.setAttribute('data-footer', asset.footer);
         img.src = asset.url;
-
         galleryCell.appendChild(img);
         source.push(galleryCell);
       });
