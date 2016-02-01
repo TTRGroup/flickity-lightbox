@@ -230,10 +230,12 @@ Flickity.prototype._fillLightbox = function(galleryCells) {
 
   if (typeof source === 'string') {
     try {
-      var data = JSON.parse(galleryCells)
+      var data = JSON.parse(galleryCells);
       source = [];
       data.forEach(function(asset) {
-        var img = document.createElement('img')
+        var img = document.createElement('img');
+        img.setAttribute('data-header', asset.header);
+        img.setAttribute('data-footer', asset.footer);
         img.src = asset.url;
         source.push(img);
       });
